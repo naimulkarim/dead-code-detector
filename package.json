@@ -1,0 +1,77 @@
+{
+  "name": "dead-code-detector",
+  "displayName": "Dead Code Detector (AI)",
+  "description": "AI-powered detector for unreachable logic, unused APIs, and obsolete feature flags",
+  "version": "0.1.0",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Linters", "Other"],
+  "activationEvents": ["onLanguage:javascript", "onLanguage:typescript", "onLanguage:python"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "deadCode.analyzeFile",
+        "title": "Dead Code: Analyze Current File"
+      },
+      {
+        "command": "deadCode.analyzeWorkspace",
+        "title": "Dead Code: Analyze Entire Workspace"
+      },
+      {
+        "command": "deadCode.clearDiagnostics",
+        "title": "Dead Code: Clear All Diagnostics"
+      }
+    ],
+    "configuration": {
+      "title": "Dead Code Detector",
+      "properties": {
+        "deadCode.anthropicApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Your Anthropic API key (or set ANTHROPIC_API_KEY env var)"
+        },
+        "deadCode.checks": {
+          "type": "object",
+          "default": {
+            "unreachableLogic": true,
+            "unusedApis": true,
+            "obsoleteFeatureFlags": true
+          },
+          "description": "Which checks to run"
+        },
+        "deadCode.severity": {
+          "type": "string",
+          "enum": ["error", "warning", "information", "hint"],
+          "default": "warning",
+          "description": "Diagnostic severity level"
+        }
+      }
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "deadCode.analyzeFile",
+          "group": "navigation"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "deadCode.analyzeFile",
+        "key": "ctrl+shift+d",
+        "mac": "cmd+shift+d",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  }
+}
